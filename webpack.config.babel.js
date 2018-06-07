@@ -23,7 +23,11 @@ export default {
         exclude: /node_modules/,
         test: /\.js/,
         use: [
-          { loader: 'babel-loader' }
+          { loader: 'babel-loader', 
+          query: {
+          presets: ['react', 'es2015'],
+          plugins: ['transform-object-rest-spread']
+        }}
         ]
       },
       {

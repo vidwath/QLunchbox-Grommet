@@ -3,6 +3,8 @@ import 'grommet/scss/vanilla/index';
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Route, Link, Switch } from 'react-router-dom'
+import {createStore, applyMiddleware} from 'redux';
 import App from 'grommet/components/App';
 import Box from 'grommet/components/Box';
 import Header from 'grommet/components/Header';
@@ -10,18 +12,26 @@ import Footer from 'grommet/components/Footer';
 import Meter from 'grommet/components/Meter';
 import Title from 'grommet/components/Title';
 import Value from 'grommet/components/Value';
+import Dashboard from './components/dashboard';
+import HeaderBeforeLogin from './components/commons/HeaderBeforeLogin';
+import reducers from './reducers';
+import { connect } from 'react-redux';
+import ReduxThunk from 'redux-thunk'
+import { Provider } from 'react-redux';
+
+const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
 class Main extends Component {
   render() {
     return (
       <App centered={false}>
-        <Header direction="row" justify="between" size="large"
-          pad={{ horizontal: 'medium' }}>
-          <Title>Grommet standalone</Title>
-        </Header>
-        <Box pad='medium'>
-          <Meter value={40} />
-        </Box>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact={true} component={Dashboard} />
+          </Switch>
+        </BrowserRouter>
+        </Provider>
         <Footer primary={true} appCentered={true} direction="column"
           align="center" pad="small" colorIndex="grey-1">
           <p>
