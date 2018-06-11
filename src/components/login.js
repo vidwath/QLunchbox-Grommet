@@ -9,11 +9,15 @@ import { Redirect } from 'react-router-dom'
 // import Heading from 'grommet/components/Heading';
 // import Footer from 'grommet/components/Footer';
 // import Button from 'grommet/components/Button';
-import { loginModalOperation } from '../actions';
+import { loginModalOperation, loginToApp } from '../actions';
 import { connect } from 'react-redux';
 
 class LoginModal extends Component {
 
+  login (username, password) {
+    this.props.loginToApp(username, password);
+  }
+  
   closeLoginModal (e) {
     this.props.loginModalOperation(false);
   };
@@ -47,4 +51,4 @@ const mapStateToProps = (state) => {
   return { showLoginModal};
 }
 
-export default connect(mapStateToProps, { loginModalOperation }) (LoginModal);
+export default connect(mapStateToProps, { loginModalOperation, loginToApp }) (LoginModal);

@@ -7,20 +7,27 @@ import Menu from "grommet/components/Menu";
 import Title from "grommet/components/Title";
 import { connect } from 'react-redux';
 import { loginModalOperation } from '../../actions'
+import { signUpModalOperation } from '../../actions'
 import LoginModal from '../login';
+import SignUpModal from '../signup';
 
 
 class HeaderLogin extends Component {
 	getLoginModal(e) {
+		console.log('this.props', this.props);
 		this.props.loginModalOperation(true);
 	}
-
-	_signUpActivate() {
-		console.log("signup layer active");
-		this.setState({ signupactive: true });
+	getSignUpModal(e) {
+		this.props.signUpModalOperation(true);
 	}
+
+	// _signUpActivate() {
+	// 	console.log("signup layer active");
+	// 	this.setState({ signupactive: true });
+	// }
 	render() {
-		console.log("props", this.props.showLoginModal)
+		console.log("this.props.showSignUpModal - ", this.props.showSignUpModal)
+		console.log("this.props.showLoginModal - ", this.props.showLoginModal)
 		return (
 			<Header
 				size="large"
@@ -37,12 +44,13 @@ class HeaderLogin extends Component {
 						<Anchor href="#" onClick={e => this.getLoginModal(e)}>
 							Sign in
 						</Anchor>
-						<Anchor href="#" onClick={() => this._signUpActivate()}>
+						<Anchor href="#" onClick={e => this.getSignUpModal(e)}>
 							Sign up
 						</Anchor>
 					</Menu>
 				</Box>
 				{this.props.showLoginModal ? <LoginModal /> : null}
+				{this.props.showSignUpModal ? <SignUpModal /> : null}
 			</Header>
 		);
 	}
@@ -50,7 +58,9 @@ class HeaderLogin extends Component {
 
 const mapStateToProps = (state) => {
   const { showLoginModal } = state.login;
-  return { showLoginModal };
+  const { showSignUpModal } = state.signup;
+  console.log("showSignUpModal - ", showSignUpModal)
+  return { showLoginModal, showSignUpModal};
 }
 
-export default connect(mapStateToProps, { loginModalOperation }) (HeaderLogin);
+export default connect(mapStateToProps, { loginModalOperation, signUpModalOperation }) (HeaderLogin);
