@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 class LoginModal extends Component {
 
   login (username, password) {
-    this.props.loginToApp(username, password);
+    this.props.loginToApp(username, password)
   }
   
   closeLoginModal (e) {

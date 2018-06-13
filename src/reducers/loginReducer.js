@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch(action.type){
     case LOGIN_MODAL: 
-    return {...state, [action.payload.showLoginModal]:action.payload.status};
+    return {...state, [action.payload.showLoginModal]:action.payload.loginModalStatus};
       // return state[action.payload.showLoginModal] = action.payload.status;
     default :
       return state;
