@@ -3,7 +3,7 @@ import 'grommet/scss/vanilla/index';
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Link, Switch } from 'react-router-dom'
+import { Router, BrowserRouter, Route, Link, Switch } from 'react-router-dom'
 import {createStore, applyMiddleware} from 'redux';
 import App from 'grommet/components/App';
 import Box from 'grommet/components/Box';
@@ -22,30 +22,18 @@ import { Provider } from 'react-redux';
 
 const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
-class Main extends Component {
-  render() {
-    return (
-      <App centered={false}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/" exact={true} component={Dashboard} />
-            <Route path="/home"  component={Home} />
-          </Switch>
-        </BrowserRouter>
-        </Provider>
-        <Footer primary={true} appCentered={true} direction="column"
-          align="center" pad="small" colorIndex="grey-1">
-          <p>
-            Build your ideas with <a href="http://grommet.io" target="_blank">Grommet</a>!
-          </p>
-        </Footer>
-      </App>
-    );
-  }
-};
-
-let element = document.getElementById('content');
-ReactDOM.render(React.createElement(Main), element);
+ReactDOM.render((
+  <App centered={false}>
+  <Provider store={store}>
+  <BrowserRouter>
+  <Switch>
+  <Route path="/" exact={true} component={Dashboard} />
+  <Route path="/home"  component={Home} />
+  </Switch>
+  </BrowserRouter>
+  </Provider>
+  </App>),
+document.getElementById('content')  
+)
 
 document.body.classList.remove('loading');
