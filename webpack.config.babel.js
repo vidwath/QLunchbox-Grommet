@@ -1,8 +1,9 @@
-import path from 'path';
-import webpack from 'webpack';
+var webpack = require('webpack');
+var path = require('path');
 
-export default {
-  entry: './src/index.js',
+
+var config = {
+    entry: './src/index.js',
   output: {
     path: path.resolve('./dist'),
     filename: 'index.js'
@@ -10,13 +11,9 @@ export default {
   resolve: {
     extensions: ['.js', '.scss', '.css', '.json']
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    })
-  ],
+  devServer: {
+    historyApiFallback: true
+  },
   module: {
     rules: [
       {
@@ -49,3 +46,5 @@ export default {
     ]
   }
 };
+
+module.exports = config;
