@@ -13,6 +13,7 @@ import Meter from 'grommet/components/Meter';
 import Title from 'grommet/components/Title';
 import Value from 'grommet/components/Value';
 import Dashboard from './components/dashboard';
+import Home from './components/home';
 import HeaderBeforeLogin from './components/commons/HeaderBeforeLogin';
 import reducers from './reducers';
 import { connect } from 'react-redux';
@@ -29,6 +30,7 @@ class Main extends Component {
         <BrowserRouter>
           <Switch>
             <Route path="/" exact={true} component={Dashboard} />
+            <Route path="/home"  component={Home} />
           </Switch>
         </BrowserRouter>
         </Provider>

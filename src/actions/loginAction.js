@@ -1,11 +1,13 @@
-import { LOGIN_MODAL } from "./type";
+import { LOGIN_MODAL, LOGIN_INVALID } from "./type";
 import { login } from "../api/login";
+import { browserHistory } from 'react-router';
 
 export const loginModalOperation = (status) => {
 	console.log("calling action")
   return (dispatch) => {
     var showLoginModal = 'showLoginModal';
-    dispatch({type: LOGIN_MODAL, payload: {showLoginModal, status}})
+    var loginModalStatus = true;
+    dispatch({type: LOGIN_MODAL, payload: {showLoginModal, loginModalStatus}})
   }
 }
 
@@ -18,12 +20,14 @@ export const loginToApp = (email, password) => {
         var data = res.data.message;
         dispatch({type: LOGIN_INVALID, payload: {loginInvalid, data}});
       } else {
-        var loginSuccess = 'loginSuccess';
         var data = res.data;
         var success = true
+        console.log(browserHistory)
         localStorage.setItem('email', data.email)
         localStorage.setItem('token', data.id_token)
-        dispatch({type: LOGIN_SUCCESS, payload: {loginSuccess, success}})
+        var showLoginModal = 'showLoginModal';
+        var loginModalStatus = false;
+        dispatch({type: LOGIN_MODAL, payload: {showLoginModal, loginModalStatus}})
       }
     })
     .catch(e => {

@@ -1,1 +1,1 @@
-export const ROOT_URL = 'https://vbuvy8obl9.execute-api.us-west-2.amazonaws.com/dev/api/v1'
+export const ROOT_URL = 'http://127.0.0.1:3000'
