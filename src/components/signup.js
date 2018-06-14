@@ -32,7 +32,6 @@ class SignUpModal extends Component {
     }
   }
    signupSubmit(e) {
-    debugger;
     console.log('signupSubmit')
     e.preventDefault();
 

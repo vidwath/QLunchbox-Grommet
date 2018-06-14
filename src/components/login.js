@@ -3,16 +3,20 @@ import Layer from 'grommet/components/Layer';
 import LoginForm from 'grommet/components/LoginForm';
 import Title from 'grommet/components/Title';
 import Toast from 'grommet/components/Toast';
-import { Redirect } from 'react-router-dom'
 // import FormFields from 'grommet/components/FormFields';
 // import Header from 'grommet/components/Header';
 // import Heading from 'grommet/components/Heading';
 // import Footer from 'grommet/components/Footer';
 // import Button from 'grommet/components/Button';
+import { Redirect, HashRouter } from 'react-router-dom';
 import { loginModalOperation, loginToApp } from '../actions';
 import { connect } from 'react-redux';
 
 class LoginModal extends Component {
+
+  constructor(props) {
+    super(props);
+  }
 
   login (username, password) {
     this.props.loginToApp(username, password)

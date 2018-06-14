@@ -19,18 +19,20 @@ import reducers from './reducers';
 import { connect } from 'react-redux';
 import ReduxThunk from 'redux-thunk'
 import { Provider } from 'react-redux';
+import history from './history.js';
+
 
 const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
 ReactDOM.render((
   <App centered={false}>
   <Provider store={store}>
-  <BrowserRouter>
-  <Switch>
-  <Route path="/" exact={true} component={Dashboard} />
-  <Route path="/home"  component={Home} />
-  </Switch>
-  </BrowserRouter>
+    <Router history={history}>
+    <Switch>
+        <Route path="/" exact={true} component={Dashboard} />
+        <Route path="/home"  component={Home} />
+      </Switch>
+    </Router>
   </Provider>
   </App>),
 document.getElementById('content')  
