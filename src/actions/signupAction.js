@@ -7,3 +7,5 @@ export const signUpModalOperation = (status) => {
     dispatch({type: SIGNUP_MODAL, payload: {showSignUpModal, status}})
   }
 }
+
+

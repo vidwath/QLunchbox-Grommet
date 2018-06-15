@@ -21,6 +21,11 @@ import { signUpModalOperation } from "../actions";
 import { connect } from "react-redux";
 
 class SignUpModal extends Component {
+  onFiledChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
   constructor(props){
     super(props);
       this.state = {
@@ -31,9 +36,12 @@ class SignUpModal extends Component {
         contact: ''
     }
   }
+  // signup (username, password) {
+  //   this.props.signUpToApp()
+  // }
    signupSubmit(e) {
-    console.log('signupSubmit')
     e.preventDefault();
+    console.log('signupSubmit')
 
     const params = {
       firstname: this.state.fname,
@@ -43,19 +51,16 @@ class SignUpModal extends Component {
       contact: this.state.contact
     }
     console.log("params", params)
+    this.props.signUpToApp(params)
   }
 
-  closesignUpModal(e) {
+  closeSignUpModal(e) {
     this.props.signUpModalOperation(false);
   }
 
   render() {
     return (
-      <Layer closer={true} overlayClose={true}>
-        <Columns
-          pad={{ horizontal: "medium", vertical: "medium" }}
-          justify="center"
-        >
+      <Layer closer={true} overlayClose={true} onClose={(e)=>{this.closeSignUpModal(e)}}>
           <Form onSubmit={(e) => this.signupSubmit(e)}>
             <FormFields>
               <fieldset>
@@ -63,19 +68,19 @@ class SignUpModal extends Component {
                   Sign up
                 </Heading>
                 <FormField label="Name">
-                  <TextInput id="signUpName" name="fname" value={this.state.fname} required/>
+                  <TextInput id="signUpName" name="fname" onDOMChange={(e) => this.onFiledChange(e)}  value={this.state.fname} required/>
                 </FormField>
                 <FormField label="Email">
-                  <TextInput id="signUpEmail" name="email" value={this.state.email} required/>
+                  <TextInput id="signUpEmail" name="email" onDOMChange={(e) => this.onFiledChange(e)} value={this.state.email} required/>
                 </FormField>
                 <FormField>
-                  <PasswordInput placeholder="Password" name="password" value={this.state.password} required />
+                  <PasswordInput placeholder="Password" name="password" onChange={(e) => this.onFiledChange(e)} value={this.state.password} required />
                 </FormField>
                 <FormField>
-                  <PasswordInput placeholder="Confirm Password" name="confirmPassword" value={this.state.cpassword} required />
+                  <PasswordInput placeholder="Confirm Password" name="confirmPassword" onChange={(e) => this.onFiledChange(e)} value={this.state.confirmPassword} required />
                 </FormField>
                 <FormField label="Contact Number">
-                  <TextInput id="signUpMobile" name="contact" value={this.state.contact} required />
+                  <TextInput id="signUpMobile" name="contact" onDOMChange={(e) => this.onFiledChange(e)} value={this.state.contact} required />
                 </FormField>
                 <FormField>
                   <CheckBox
@@ -89,12 +94,11 @@ class SignUpModal extends Component {
             <Footer pad={{ vertical: "medium" }}>
               <Button
                 label="Sign Up"
-                href="#"
+                type="submit"
                 primary={true}
               />
             </Footer>
           </Form>
-        </Columns>
       </Layer>
     );
   }
@@ -105,4 +109,4 @@ const mapStateToProps = state => {
   return { showSignUpModal };
 };
 
-export default connect(mapStateToProps, { signUpModalOperation })(SignUpModal);
+export default connect(mapStateToProps, { signUpModalOperation, signUpToApp })(SignUpModal);
