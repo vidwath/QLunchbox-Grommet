@@ -9,48 +9,48 @@ import { connect } from 'react-redux';
 
 
 
-const itemsList = [
-  {
-    id: "1",
-    name: "Full Meals"
-  },
-  {
-    id: "2",
-    name: "Chapathi"
-  },
-  {
-    id: "3",
-    name: "Parota"
-  },
-  {
-    id: "4",
-    name: "Parota"
-  },
-  {
-    id: "5",
-    name: "Parota"
-  },
-  {
-    id: "6",
-    name: "Parota"
-  },
-  {
-    id: "6",
-    name: "Parota"
-  },
-  {
-    id: "5",
-    name: "Parota"
-  },
-  {
-    id: "6",
-    name: "Parota"
-  },
-  {
-    id: "6",
-    name: "Parota"
-  }
-];
+// const itemsList = [
+//   {
+//     id: "1",
+//     name: "Full Meals"
+//   },
+//   {
+//     id: "2",
+//     name: "Chapathi"
+//   },
+//   {
+//     id: "3",
+//     name: "Parota"
+//   },
+//   {
+//     id: "4",
+//     name: "Parota"
+//   },
+//   {
+//     id: "5",
+//     name: "Parota"
+//   },
+//   {
+//     id: "6",
+//     name: "Parota"
+//   },
+//   {
+//     id: "6",
+//     name: "Parota"
+//   },
+//   {
+//     id: "5",
+//     name: "Parota"
+//   },
+//   {
+//     id: "6",
+//     name: "Parota"
+//   },
+//   {
+//     id: "6",
+//     name: "Parota"
+//   }
+// ];
 
 class Home extends Component {
   constructor(props) {
@@ -64,25 +64,6 @@ class Home extends Component {
 
   render() {
     debugger
-    // const displayFoodItems = show_item.map(singleItem => (
-      // <Box
-      //   align="center"
-      //   pad="medium"
-      //   margin="small"
-      //   colorIndex="light-2"
-      //   basis="1/4"
-      // >
-      //   <Image
-      //     src="./food-item-1.jpg"
-      //     caption={singleItem.name}
-      //     size="medium"
-      //     full={false}
-      //   />
-      //   <Heading tag="h5">{singleItem.id}</Heading>
-      //   <Heading tag="h5">Price: &#8377;120</Heading>
-      //   <Heading tag="h5">Paradise Hotel</Heading>
-      // </Box>
-    // ));
     return(
       <div>
         <NavHeader/><br/>

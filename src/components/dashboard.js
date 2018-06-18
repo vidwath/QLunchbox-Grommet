@@ -33,6 +33,7 @@ import Value from "grommet/components/Value";
 import Meter from "grommet/components/Meter";
 import Spinning from "grommet/components/icons/Spinning";
 import HeaderBeforeLogin from "./commons/headerBeforeLogin"
+import { itemModalShow } from '../actions'
 // // import API_END_POINT from "../../../server/api";
 // import fetch from "isomorphic-fetch";
 // // import NavControl from '../components/NavControl';
@@ -90,18 +91,8 @@ class Dashboard extends Component {
     // this._signUpActivate = this._signUpActivate.bind(this); 
     this._onClose = this._onClose.bind(this);
     this._onCloseSignUp = this._onCloseSignUp.bind(this);
-    this.state = { signinactive: undefined }; //initial state is undefined, so the layer is not open
+    this.state = { signinactive: undefined, itemModalActive: undefined  }; //initial state is undefined, so the layer is not open
   }
-  //activation function
-  // _signInActivate() {
-  //   console.log("layer active");
-  //   this.setState({ signinactive: true });
-  // }
-
-  // _signUpActivate() {
-  //   console.log("signup layer active");
-  //   this.setState({ signupactive: true });
-  // }
 
   _onClose() {
     console.log("layer inactive");
@@ -113,22 +104,14 @@ class Dashboard extends Component {
     this.setState({ signupactive: false });
   }
 
-  // _onLogin(fields) {
-  //   fetch("https://vbuvy8obl9.execute-api.us-west-2.amazonaws.com/dev/api/v1", {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       email: fields.username,
-  //       password: fields.password
-  //     })
-  //   }).then(response => {
-  //     console.log("response", response);
-  //   });
-  //   // no-op
-  //   alert(
-  //     `Username: ${fields.username}, Password: ${fields.password},` +
-  //       ` rememberMe: ${fields.rememberMe}`
-  //   );
-  // }
+  getItemModal(e) {
+     this.setState({ itemModalActive: true });
+  }
+  
+  _onItemModalClose() {
+    console.log("Item modal inactive");
+    this.setState({ itemModalActive: false });
+  }
 
   _onLogin(fields) {
     const user = {
@@ -152,16 +135,6 @@ class Dashboard extends Component {
       .then(response => {
         if (response.status === 200) {
           console.log(response)
-          // bake_cookie("user_data", response.user);
-          // this.setState({
-          //   loginResponseMessage: response.message
-          // });
-          // this.props.signInRef();
-          // if (response.user.user_role === "admin"){
-          //   hashHistory.push("/admin/itemList");
-          // } else {
-          //   this.props.onLoginReloadItemList();
-          // }
         } else if (response.status === 422) {
           this.setState({
             passwordError: response.error
@@ -180,6 +153,7 @@ class Dashboard extends Component {
         margin="small"
         colorIndex="light-2"
         basis="1/4"
+        onClick={e => this.getItemModal(e)}
       >
         <Image
           src="./food-item-1.jpg"
@@ -191,6 +165,7 @@ class Dashboard extends Component {
         <Heading tag="h5">Price: &#8377;120</Heading>
         <Heading tag="h5">Paradise Hotel</Heading>
       </Box>
+
     ));
 
     let signInLayer = null;
@@ -260,6 +235,20 @@ class Dashboard extends Component {
       );
     }
 
+    let itemModalLayer = null;
+    if (this.state.itemModalActive) {
+      itemModalLayer = (
+        <Layer
+          closer={true}
+          overlayClose={true}
+          onClose={this._onItemModalClose}
+          align="top"
+        >
+          <Heading tag="h3">Item Modal Active</Heading>
+        </Layer>
+      );
+    }
+
     return (
       <Article primary={true}>
         <HeaderBeforeLogin/>
@@ -281,6 +270,7 @@ class Dashboard extends Component {
         </Columns>        
         {signUpLayer}
         {signInLayer}
+        {itemModalLayer}
       </Article>
     );
   }

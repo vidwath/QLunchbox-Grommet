@@ -17,7 +17,7 @@ import CheckBox from "grommet/components/CheckBox";
 import NumberInput from "grommet/components/NumberInput";
 import Footer from "grommet/components/Footer";
 import Button from "grommet/components/Button";
-import { signUpModalOperation } from "../actions";
+import { signUpModalOperation, signupToApp } from "../actions";
 import { connect } from "react-redux";
 
 class SignUpModal extends Component {
@@ -44,14 +44,15 @@ class SignUpModal extends Component {
     console.log('signupSubmit')
 
     const params = {
-      firstname: this.state.fname,
-      email: this.state.email,
+      first_name: this.state.fname,
+      last_name: this.state.lname,
       password: this.state.password,
-      passwordconfirmation: this.state.confirmPassword,
-      contact: this.state.contact
+      email: this.state.email,
+      account_status: true,
+      auth_token: "1234"
     }
     console.log("params", params)
-    this.props.signUpToApp(params)
+    this.props.signupToApp(params)
   }
 
   closeSignUpModal(e) {
@@ -68,19 +69,19 @@ class SignUpModal extends Component {
                   Sign up
                 </Heading>
                 <FormField label="Name">
-                  <TextInput id="signUpName" name="fname" onDOMChange={(e) => this.onFiledChange(e)}  value={this.state.fname} required/>
+                  <TextInput id="firstName" name="fname" onDOMChange={(e) => this.onFiledChange(e)}  value={this.state.fname} required/>
                 </FormField>
-                <FormField label="Email">
-                  <TextInput id="signUpEmail" name="email" onDOMChange={(e) => this.onFiledChange(e)} value={this.state.email} required/>
+                <FormField label="lastName">
+                  <TextInput id="lastName" name="lname" onDOMChange={(e) => this.onFiledChange(e)}  value={this.state.lname} required/>
+                </FormField>
+                <FormField label="Contact Number">
+                  <TextInput id="signUpMobile" name="contact" onDOMChange={(e) => this.onFiledChange(e)} value={this.state.contact} required />
                 </FormField>
                 <FormField>
                   <PasswordInput placeholder="Password" name="password" onChange={(e) => this.onFiledChange(e)} value={this.state.password} required />
                 </FormField>
-                <FormField>
-                  <PasswordInput placeholder="Confirm Password" name="confirmPassword" onChange={(e) => this.onFiledChange(e)} value={this.state.confirmPassword} required />
-                </FormField>
-                <FormField label="Contact Number">
-                  <TextInput id="signUpMobile" name="contact" onDOMChange={(e) => this.onFiledChange(e)} value={this.state.contact} required />
+                <FormField label="Email">
+                  <TextInput id="signUpEmail" name="email" onDOMChange={(e) => this.onFiledChange(e)} value={this.state.email} required/>
                 </FormField>
                 <FormField>
                   <CheckBox
@@ -109,4 +110,4 @@ const mapStateToProps = state => {
   return { showSignUpModal };
 };
 
-export default connect(mapStateToProps, { signUpModalOperation, signUpToApp })(SignUpModal);
+export default connect(mapStateToProps, { signUpModalOperation, signupToApp })(SignUpModal);
