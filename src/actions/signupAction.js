@@ -1,6 +1,7 @@
 import { SIGNUP_MODAL } from "./type";
 import { signup } from "../api/signup";
 import { browserHistory } from 'react-router';
+import { ROOT_URL } from '../api/api_config';
 import history from '../history.js';
 
 
@@ -14,7 +15,7 @@ export const signUpModalOperation = (status) => {
 
 export const signupToApp = (params) => {
   return(dispatch) => {
-    const URL = 'http://localhost:3000/api/users/create'
+    const URL = `${ROOT_URL}/api/users/create`
     fetch(URL, {
       method: 'POST',
       body: JSON.stringify(params)
