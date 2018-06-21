@@ -32,76 +32,22 @@ import Title from "grommet/components/Title";
 import Value from "grommet/components/Value";
 import Meter from "grommet/components/Meter";
 import Spinning from "grommet/components/icons/Spinning";
-import HeaderBeforeLogin from "./commons/headerBeforeLogin"
-// // import API_END_POINT from "../../../server/api";
-// import fetch from "isomorphic-fetch";
-// // import NavControl from '../components/NavControl';
-// // import { loadDashboard, unloadDashboard } from "../actions/dashboard";
-
-// // import { pageLoaded } from "./utils";
-
-const itemsList = [
-  {
-    id: "1",
-    name: "Full Meals"
-  },
-  {
-    id: "2",
-    name: "Chapathi"
-  },
-  {
-    id: "3",
-    name: "Parota"
-  },
-  {
-    id: "4",
-    name: "Parota"
-  },
-  {
-    id: "5",
-    name: "Parota"
-  },
-  {
-    id: "6",
-    name: "Parota"
-  },
-  {
-    id: "6",
-    name: "Parota"
-  },
-  {
-    id: "5",
-    name: "Parota"
-  },
-  {
-    id: "6",
-    name: "Parota"
-  },
-  {
-    id: "6",
-    name: "Parota"
-  }
-];
+import HeaderBeforeLogin from "./commons/headerBeforeLogin";
+import { itemModalShow } from "../actions";
+import { getItems } from "../actions";
+import { connect } from "react-redux";
 
 class Dashboard extends Component {
   constructor() {
     super();
-    // this._signInActivate = this._signInActivate.bind(this); 
-    // this._signUpActivate = this._signUpActivate.bind(this); 
     this._onClose = this._onClose.bind(this);
     this._onCloseSignUp = this._onCloseSignUp.bind(this);
-    this.state = { signinactive: undefined }; //initial state is undefined, so the layer is not open
+    this.state = { signinactive: undefined, itemModalActive: undefined }; //initial state is undefined, so the layer is not open
   }
-  //activation function
-  // _signInActivate() {
-  //   console.log("layer active");
-  //   this.setState({ signinactive: true });
-  // }
 
-  // _signUpActivate() {
-  //   console.log("signup layer active");
-  //   this.setState({ signupactive: true });
-  // }
+  componentWillMount() {
+    this.props.getItems();
+  }
 
   _onClose() {
     console.log("layer inactive");
@@ -113,55 +59,40 @@ class Dashboard extends Component {
     this.setState({ signupactive: false });
   }
 
-  // _onLogin(fields) {
-  //   fetch("https://vbuvy8obl9.execute-api.us-west-2.amazonaws.com/dev/api/v1", {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       email: fields.username,
-  //       password: fields.password
-  //     })
-  //   }).then(response => {
-  //     console.log("response", response);
-  //   });
-  //   // no-op
-  //   alert(
-  //     `Username: ${fields.username}, Password: ${fields.password},` +
-  //       ` rememberMe: ${fields.rememberMe}`
-  //   );
-  // }
+  getItemModal(e, singleItem) {
+    this.setState({ itemModalActive: true });
+    this.setState({ singleitem: singleItem });
+  }
+
+  _onItemModalClose() {
+    console.log("Item modal inactive");
+    this.setState({ itemModalActive: false });
+  }
 
   _onLogin(fields) {
     const user = {
       email: fields.username,
       password: fields.password
     };
-    fetch("https://vbuvy8obl9.execute-api.us-west-2.amazonaws.com/dev/api/v1/session/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(user)
-    })
+    fetch(
+      "https://vbuvy8obl9.execute-api.us-west-2.amazonaws.com/dev/api/v1/session/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+      }
+    )
       .then(response => {
         if (response.status === 200) {
-          console.log(response)
-          // bake_cookie("auth_token", response.headers.get("x-auth-token"));
+          console.log(response);
         }
         return response.json();
       })
       .then(response => {
         if (response.status === 200) {
-          console.log(response)
-          // bake_cookie("user_data", response.user);
-          // this.setState({
-          //   loginResponseMessage: response.message
-          // });
-          // this.props.signInRef();
-          // if (response.user.user_role === "admin"){
-          //   hashHistory.push("/admin/itemList");
-          // } else {
-          //   this.props.onLoginReloadItemList();
-          // }
+          console.log(response);
         } else if (response.status === 422) {
           this.setState({
             passwordError: response.error
@@ -173,25 +104,6 @@ class Dashboard extends Component {
   render() {
     const { error, tasks } = this.props;
     const { intl } = this.context;
-    const displayFoodItems = itemsList.map(singleItem => (
-      <Box
-        align="center"
-        pad="medium"
-        margin="small"
-        colorIndex="light-2"
-        basis="1/4"
-      >
-        <Image
-          src="./food-item-1.jpg"
-          caption={singleItem.name}
-          size="medium"
-          full={false}
-        />
-        <Heading tag="h5">{singleItem.id}</Heading>
-        <Heading tag="h5">Price: &#8377;120</Heading>
-        <Heading tag="h5">Paradise Hotel</Heading>
-      </Box>
-    ));
 
     let signInLayer = null;
     if (this.state.signinactive) {
@@ -260,9 +172,56 @@ class Dashboard extends Component {
       );
     }
 
+    let itemModalLayer = null;
+    if (this.state.itemModalActive) {
+      itemModalLayer = (
+        <Layer
+          closer={true}
+          overlayClose={true}
+          onClose={e => this._onItemModalClose()}
+          align="top"
+          id="{this.state.singleitem.id}"
+        >
+          <Box pad="medium" margin="small" colorIndex="light-2" basis="1/4">
+            <Image
+              src="./food-item-1.jpg"
+              caption={name}
+              size="medium"
+              full={false}
+              align="center"
+              className="img-responsive"
+            />
+            <Heading tag="h5" align="center">
+              {this.state.singleitem.id}
+            </Heading>
+            <Heading tag="h5" align="center">
+              Price: &#8377;{this.state.singleitem.price}
+            </Heading>
+            <Heading tag="h5" align="center">
+              {this.state.singleitem.name}
+            </Heading>
+            <p>
+              Details: 
+              <br/>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book.
+            </p>
+            <Button
+              align="center"
+              label="Add to cart"
+              type="submit"
+              primary={false}
+            />
+          </Box>
+        </Layer>
+      );
+    }
+
     return (
       <Article primary={true}>
-        <HeaderBeforeLogin/>
+        <HeaderBeforeLogin />
         <Hero
           background={<Image src="./splash.jpg" fit="cover" full={true} />}
           backgroundColorIndex="dark"
@@ -270,23 +229,48 @@ class Dashboard extends Component {
           <Box direction="row" justify="center" align="center">
             <Box basis="1/2" align="end" pad="medium" />
             <Box basis="1/2" align="start" pad="medium">
-              <Heading margin="none">Delivery to your Desk</Heading>
+              <Heading margin="none">Delivery at your Desk</Heading>
             </Box>
           </Box>
         </Hero>
         <Columns margin="small">
           <Box direction="row" full="horizontal" wrap={true}>
-            {displayFoodItems}
+            {this.props.show_item
+              ? this.props.show_item.map(singleItem => (
+                  <Box
+                    align="center"
+                    pad="medium"
+                    margin="small"
+                    colorIndex="light-2"
+                    basis="1/4"
+                    onClick={e => this.getItemModal(e, singleItem)}
+                    key={singleItem.id}
+                  >
+                    <Image
+                      src={singleItem.image}
+                      caption={singleItem.name}
+                      size="medium"
+                      full={false}
+                    />
+                    <Heading tag="h5">{singleItem.id}</Heading>
+                    <Heading tag="h5">Prize: {singleItem.price}</Heading>
+                    <Heading tag="h5">{singleItem.hotel}</Heading>
+                  </Box>
+                ))
+              : ""}
           </Box>
-        </Columns>        
+        </Columns>
         {signUpLayer}
         {signInLayer}
+        {itemModalLayer}
       </Article>
     );
   }
 }
 
+const mapStateToProps = state => {
+  const { show_item } = state.item;
+  return { show_item };
+};
 
-
-
-export default Dashboard;
+export default connect(mapStateToProps, { getItems })(Dashboard);
