@@ -25,8 +25,7 @@ export const loginToApp = (email, password) => {
         var data = res.data;
         var success = true
         localStorage.setItem('email', data.user.email)
-        localStorage.setItem('token', data.token)
-        
+        localStorage.setItem('access_token', data.token)
         var showLoginModal = 'showLoginModal';
         var loginModalStatus = false;
         dispatch({type: LOGIN_MODAL, payload: {showLoginModal, loginModalStatus}})

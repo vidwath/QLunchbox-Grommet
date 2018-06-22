@@ -21,10 +21,61 @@ import { signUpModalOperation, signupToApp } from "../actions";
 import { connect } from "react-redux";
 
 class SignUpModal extends Component {
-  onFiledChange(e) {
+  onFieldChange(e) {
     this.setState({
       [e.target.name]: e.target.value
     })
+  }
+  handleUserInput(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({[name]: value},
+                () => { this.validateField(name, value) });
+  }
+  onClick(e){
+    if(e.target.checked === true){
+      this.setState({isChecked: true})
+    }else{
+      this.setState({isChecked: false})
+    }
+  }
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let fNameValid = this.state.fNameValid;  
+    let lNameValid = this.state.lNameValid;  
+    let contactValid = this.state.contactValid;  
+    let passwordValid = this.state.passwordValid;  
+    let emailValid = this.state.emailValid;
+    switch(fieldName) {
+      case 'fname':
+        fNameValid = value.length >= 4;
+        fieldValidationErrors.fname = fNameValid ? '': ' is too short';
+        break;
+        case 'lname':
+        lNameValid = value.length >= 4;
+        fieldValidationErrors.lname = lNameValid ? '': ' is too short';
+        break;
+        case 'contact':
+        contactValid = value.match(/^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/);
+        fieldValidationErrors.contact = contactValid ? '': ' is not correct';
+        break;
+        case 'password':
+        passwordValid = value.length >= 6;
+        fieldValidationErrors.password = passwordValid ? '': ' is too short';
+        break;
+        case 'email':
+        emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+        fieldValidationErrors.email = emailValid ? '': 'Invalid email address';
+        break;
+      default:
+        break;
+    }
+    this.setState({formErrors: fieldValidationErrors,
+                    fNameValid, lNameValid, contactValid, passwordValid, emailValid, isChecked
+                  },this.validateForm);
+  }
+   validateForm() {
+    this.setState({formValid: this.state.fNameValid && this.state.lNameValid && this.state.passwordValid && this.state.emailValid && this.state.isChecked});
   }
   constructor(props){
     super(props);
@@ -32,9 +83,15 @@ class SignUpModal extends Component {
         fname: '',
         email: '',
         password: '',
-        confirmPassword: '',
-        contact: ''
+        contact: '',
+        formErrors: {},
+        fNameValid: '',
+        lNameValid: '',
+        passwordValid: '',
+        emailValid: '',
+        isChecked: false
     }
+    this.onClick = this.onClick.bind(this);
   }
   // signup (username, password) {
   //   this.props.signUpToApp()
@@ -68,26 +125,28 @@ class SignUpModal extends Component {
                 <Heading tag="h3" margin="none" strong={true} align="center">
                   Sign up
                 </Heading>
-                <FormField label="Name">
-                  <TextInput id="firstName" name="fname" onDOMChange={(e) => this.onFiledChange(e)}  value={this.state.fname} required/>
+                <FormField label="Name" error={this.state.formErrors['fname']}>
+                  <TextInput id="firstName" name="fname" onDOMChange={(e) => this.onFieldChange(e)} onKeyUp={(e) => this.handleUserInput(e)}  value={this.state.fname} required/>
                 </FormField>
-                <FormField label="lastName">
-                  <TextInput id="lastName" name="lname" onDOMChange={(e) => this.onFiledChange(e)}  value={this.state.lname} required/>
+                <FormField label="Last Name" error={this.state.formErrors['lname']}>
+                  <TextInput id="lastName" name="lname" onDOMChange={(e) => this.onFieldChange(e)} onKeyUp={(e) => this.handleUserInput(e)}  value={this.state.lname} required/>
                 </FormField>
-                <FormField label="Contact Number">
-                  <TextInput id="signUpMobile" name="contact" onDOMChange={(e) => this.onFiledChange(e)} value={this.state.contact} required />
+                <FormField label="Contact Number" error={this.state.formErrors['contact']}>
+                  <TextInput placeHolder="111-111-1111" id="signUpMobile" name="contact" onDOMChange={(e) => this.onFieldChange(e)} onKeyUp={(e) => this.handleUserInput(e)} value={this.state.contact} required />
                 </FormField>
-                <FormField>
-                  <PasswordInput placeholder="Password" name="password" onChange={(e) => this.onFiledChange(e)} value={this.state.password} required />
+                <FormField label="Password" error={this.state.formErrors['password']}>
+                  <PasswordInput placeholder="Password" name="password" onChange={(e) => this.onFieldChange(e)} value={this.state.password} onKeyUp={(e) => this.handleUserInput(e)} required />
                 </FormField>
-                <FormField label="Email">
-                  <TextInput id="signUpEmail" name="email" onDOMChange={(e) => this.onFiledChange(e)} value={this.state.email} required/>
+                <FormField label="Email" error={this.state.formErrors['email']}>
+                  <TextInput id="signUpEmail" name="email" onDOMChange={(e) => this.onFieldChange(e)} onKeyUp={(e) => this.handleUserInput(e)} value={this.state.email} required/>
                 </FormField>
                 <FormField>
                   <CheckBox
                     id="agree"
                     name="agree"
                     label="I agree to terms & conditions"
+                    onClick={this.onClick} 
+                    checked={this.state.checked}
                   />
                 </FormField>
               </fieldset>

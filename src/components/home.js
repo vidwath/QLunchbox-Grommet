@@ -3,7 +3,7 @@ import NavHeader from "./commons/headerBeforeLogin";
 import Login from "grommet/components/icons/base/Login";
 import TrashIcon from "grommet/components/icons/base/Trash";
 import { Card, Anchor, Box, Columns } from "grommet";
-import { browserHistory } from "react-router";
+import browserHistory from '../history.js';
 import Image from "grommet/components/Image";
 import Layer from "grommet/components/Layer";
 import Header from "grommet/components/Header";
@@ -32,10 +32,17 @@ import Button from "grommet/components/Button";
 import { getItems, createItem, deleteItem } from "../actions";
 
 class Home extends Component {
-  onFiledChange(e) {
+  onFieldChange(e) {
     this.setState({
       [e.target.name]: e.target.value
     });
+  }
+
+   handleUserInput(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({[name]: value},
+                () => { this.validateField(name, value) });
   }
 
   constructor(props) {
@@ -47,7 +54,13 @@ class Home extends Component {
       quantity: "",
       source: "",
       msg: false,
-      deleteModalActive: false
+      deleteModalActive: false,
+      formErrors: {},
+      itemNameValid: false,
+      priceValid: false,
+      categoryValid: false,
+      quantityValid: false,
+      sourceValid: false
     };
   }
 
@@ -89,12 +102,59 @@ class Home extends Component {
     this.setState({ deleteModalActive: false });
   }
 
+  logOut() {
+    console.log("sign out");
+    localStorage.clear();
+    browserHistory.push('/');
+    // this.setState({ deleteModalActive: false });
+  }
+
   deleteItemById(id) {
     this.setState({ deleteModalActive: false });
     this.state.deletableItem.remove();
     console.log('deleteItem', id);
     this.props.deleteItem(id);
     console.log(document.getElementById(id));
+  }
+  
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let itemNameValid = this.state.itemNameValid;  
+    let priceValid = this.state.priceValid;  
+    let categoryValid = this.state.categoryValid;  
+    let quantityValid = this.state.quantityValid;  
+    let sourceValid = this.state.sourceValid;  
+
+    switch(fieldName) {
+      case 'itemName':
+        itemNameValid = value.length >= 4;
+        fieldValidationErrors.itemName = itemNameValid ? '': ' is too short';
+        break;
+        case 'price':
+        priceValid = value.match(/^\d+$/);
+        fieldValidationErrors.price = priceValid ? '': 'Numbers only';
+        break;
+         case 'category':
+        categoryValid = value.length >= 4;
+        fieldValidationErrors.category = categoryValid ? '': ' is too short';
+        break;
+        case 'quantity':
+        quantityValid = value.match(/^\d+$/);
+        fieldValidationErrors.quantity = quantityValid ? '': 'Numbers only';
+        break;
+        case 'source':
+        sourceValid = value.length >= 4;
+        fieldValidationErrors.source = sourceValid ? '': ' is too short';
+        break;
+      default:
+        break;
+    }
+    this.setState({formErrors: fieldValidationErrors,
+                    itemNameValid, priceValid,categoryValid,quantityValid, sourceValid
+                  },this.validateForm);
+  }
+   validateForm() {
+    this.setState({formValid: this.state.itemNameValid && this.state.priceValid && this.state.categoryValid && this.state.quantityValid && sourceValid});
   }
 
   render() {
@@ -130,7 +190,7 @@ class Home extends Component {
           </Title>
           <Box flex={true} justify="end" direction="row" responsive={false}>
             <Menu icon={<Login />} dropAlign={{ right: "right" }}>
-              <Anchor href="/">Logout</Anchor>
+              <Anchor onClick={e => this.logOut(e)}>Logout</Anchor>
             </Menu>
           </Box>
         </Header>
@@ -161,7 +221,7 @@ class Home extends Component {
                         <td>{singleItem.id}</td>
                         <td>{singleItem.name}</td>
                         <td>{singleItem.price}</td>
-                        <td>{singleItem.price}</td>
+                        <td>{singleItem.source}</td>
                         <td>
                           <a onClick={e => this.deleteItemModal(e, singleItem)}>
                             <TrashIcon />
@@ -185,47 +245,52 @@ class Home extends Component {
                   <Heading tag="h3" margin="none" strong={true} align="center">
                     Create Item
                   </Heading>
-                  <FormField label="Name">
+                  <FormField label="Name" error={this.state.formErrors['itemName']}>
                     <TextInput
                       id="firstName"
                       name="itemName"
-                      onDOMChange={e => this.onFiledChange(e)}
+                      onDOMChange={e => this.onFieldChange(e)}
+                      onKeyUp={(e) => this.handleUserInput(e)}
                       value={this.state.itemName}
                       required
                     />
                   </FormField>
-                  <FormField label="Price">
+                  <FormField label="Price" error={this.state.formErrors['price']}>
                     <TextInput
-                      id="lastName"
+                      id="price"
                       name="price"
-                      onDOMChange={e => this.onFiledChange(e)}
+                      onDOMChange={e => this.onFieldChange(e)}
+                      onKeyUp={(e) => this.handleUserInput(e)}
                       value={this.state.price}
                       required
                     />
                   </FormField>
-                  <FormField label="Category">
+                  <FormField label="Cuisine" error={this.state.formErrors['category']}>
                     <TextInput
                       id="category"
                       name="category"
-                      onDOMChange={e => this.onFiledChange(e)}
+                      onDOMChange={e => this.onFieldChange(e)}
+                      onKeyUp={(e) => this.handleUserInput(e)}
                       value={this.state.Category}
                       required
                     />
                   </FormField>
-                  <FormField label="Quantity">
+                  <FormField label="Quantity" error={this.state.formErrors['quantity']}>
                     <TextInput
                       id="Quantity"
                       name="quantity"
-                      onDOMChange={e => this.onFiledChange(e)}
+                      onDOMChange={e => this.onFieldChange(e)}
+                      onKeyUp={(e) => this.handleUserInput(e)}
                       value={this.state.quantity}
                       required
                     />
                   </FormField>
-                  <FormField label="Source">
+                  <FormField label="Source" error={this.state.formErrors['source']}>
                     <TextInput
                       id="Source"
                       name="source"
-                      onDOMChange={e => this.onFiledChange(e)}
+                      onDOMChange={e => this.onFieldChange(e)}
+                      onKeyUp={(e) => this.handleUserInput(e)}
                       value={this.state.source}
                       required
                     />
