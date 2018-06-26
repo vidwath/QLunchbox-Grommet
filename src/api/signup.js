@@ -11,10 +11,10 @@ export const signup = (params) => {
   }
   console.log('api', params)
   return axios.post(`${ROOT_URL}/api/users/create`)
-    // .then(function (response) {
-    //   console.log(response);
-    // })
-    // .catch(function (error) {
-    //   console.log(error);
-    // });
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 }

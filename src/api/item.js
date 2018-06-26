@@ -3,7 +3,7 @@ import { ROOT_URL } from './api_config';
 
 const headers = () => {
     return {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
       'Email': localStorage.getItem('email'),
       'Content-Type': 'application/json'
     };
