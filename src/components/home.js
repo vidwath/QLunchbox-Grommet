@@ -23,6 +23,7 @@ import TextInput from "grommet/components/TextInput";
 import Table from "grommet/components/Table";
 import TableRow from "grommet/components/TableRow";
 import PasswordInput from "grommet/components/PasswordInput";
+import Toast from 'grommet/components/Toast';
 import Notification from "grommet/components/Notification";
 import DateTime from "grommet/components/DateTime";
 import CheckBox from "grommet/components/CheckBox";
@@ -60,13 +61,19 @@ class Home extends Component {
       priceValid: false,
       categoryValid: false,
       quantityValid: false,
-      sourceValid: false
+      sourceValid: false,
+      isSubmit: false
     };
   }
 
   addItem(e) {
     e.preventDefault();
     console.log("addItem");
+    this.setState({isSubmit: true,itemName: "",
+      price: "",
+      category: "",
+      quantity: "",
+      source: "" }) 
 
     const params = {
       image:
@@ -135,7 +142,7 @@ class Home extends Component {
         fieldValidationErrors.price = priceValid ? '': 'Numbers only';
         break;
          case 'category':
-        categoryValid = value.length >= 4;
+        categoryValid = value.match(/^\d+$/);
         fieldValidationErrors.category = categoryValid ? '': ' is too short';
         break;
         case 'quantity':
@@ -154,7 +161,7 @@ class Home extends Component {
                   },this.validateForm);
   }
    validateForm() {
-    this.setState({formValid: this.state.itemNameValid && this.state.priceValid && this.state.categoryValid && this.state.quantityValid && sourceValid});
+    this.setState({formValid: this.state.itemNameValid && this.state.priceValid && this.state.categoryValid && this.state.quantityValid && this.state.sourceValid});
   }
 
   render() {
@@ -239,6 +246,9 @@ class Home extends Component {
             align="center"
             pad="medium"
           >
+          { ((this.state.formValid == true) && this.state.isSubmit) ? (<Toast status='ok'>
+          Item added.
+          </Toast>) : null }`
             <Form onSubmit={e => this.addItem(e)}>
               <FormFields>
                 <fieldset>

@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 class LoginModal extends Component {
 
   constructor(props) {
-    super(props);
+    super(props); 
   }
 
   login (username, password) {
@@ -22,32 +22,27 @@ class LoginModal extends Component {
   };
 
   render() {
-    
+    debugger
     return (
-      <Layer 
-        closer={true}
-        flush={false}
-        overlayClose={true} 
-        onClose={(e)=>{this.closeLoginModal(e)}}>
-        { this.props.loginInvalid ? 
-          <Toast status='critical'>
-            Invalid Email or Password
-          </Toast> 
-        : 
-          null 
-        }
-        <LoginForm 
-        title='Login'
-        rememberMe={false} 
-        onSubmit={(username, password) => this.login(username, password)}/>
-      </Layer>
+        <Layer 
+          closer={true}
+          flush={false}
+          overlayClose={true} 
+          onClose={(e)=>{this.closeLoginModal(e)}}>
+          <LoginForm 
+          title='Login'
+          rememberMe={false}
+          errors={this.props.loginInvalid ? [this.props.loginInvalid.data]: []}
+          onSubmit={(username, password) => this.login(username, password)}/>
+        </Layer>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  const { showLoginModal} = state.login;
-  return { showLoginModal};
+  console.log('state', state);
+  const { showLoginModal, loginInvalid} = state.login;
+  return { showLoginModal, loginInvalid};
 }
 
 export default connect(mapStateToProps, { loginModalOperation, loginToApp }) (LoginModal);

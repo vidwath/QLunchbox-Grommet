@@ -32,13 +32,7 @@ class SignUpModal extends Component {
     this.setState({[name]: value},
                 () => { this.validateField(name, value) });
   }
-  onClick(e){
-    if(e.target.checked === true){
-      this.setState({isChecked: true})
-    }else{
-      this.setState({isChecked: false})
-    }
-  }
+
   validateField(fieldName, value) {
     let fieldValidationErrors = this.state.formErrors;
     let fNameValid = this.state.fNameValid;  
@@ -71,11 +65,11 @@ class SignUpModal extends Component {
         break;
     }
     this.setState({formErrors: fieldValidationErrors,
-                    fNameValid, lNameValid, contactValid, passwordValid, emailValid, isChecked
+                    fNameValid, lNameValid, contactValid, passwordValid, emailValid
                   },this.validateForm);
   }
    validateForm() {
-    this.setState({formValid: this.state.fNameValid && this.state.lNameValid && this.state.passwordValid && this.state.emailValid && this.state.isChecked});
+    this.setState({formValid: this.state.fNameValid && this.state.lNameValid && this.state.passwordValid && this.state.emailValid});
   }
   constructor(props){
     super(props);
@@ -89,9 +83,7 @@ class SignUpModal extends Component {
         lNameValid: '',
         passwordValid: '',
         emailValid: '',
-        isChecked: false
     }
-    this.onClick = this.onClick.bind(this);
   }
   // signup (username, password) {
   //   this.props.signUpToApp()
@@ -139,15 +131,6 @@ class SignUpModal extends Component {
                 </FormField>
                 <FormField label="Email" error={this.state.formErrors['email']}>
                   <TextInput id="signUpEmail" name="email" onDOMChange={(e) => this.onFieldChange(e)} onKeyUp={(e) => this.handleUserInput(e)} value={this.state.email} required/>
-                </FormField>
-                <FormField>
-                  <CheckBox
-                    id="agree"
-                    name="agree"
-                    label="I agree to terms & conditions"
-                    onClick={this.onClick} 
-                    checked={this.state.checked}
-                  />
                 </FormField>
               </fieldset>
             </FormFields>
