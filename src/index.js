@@ -14,7 +14,7 @@ import Title from 'grommet/components/Title';
 import Value from 'grommet/components/Value';
 import Dashboard from './components/dashboard';
 import Home from './components/home';
-import HeaderBeforeLogin from './components/commons/HeaderBeforeLogin';
+import HeaderBeforeLogin from "./components/commons/headerBeforeLogin"
 import reducers from './reducers';
 import { connect } from 'react-redux';
 import ReduxThunk from 'redux-thunk'
