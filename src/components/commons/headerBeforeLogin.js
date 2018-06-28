@@ -20,6 +20,9 @@ class HeaderLogin extends Component {
 	getSignUpModal(e) {
 		this.props.signUpModalOperation(true);
 	}
+	loginWithOauth(e) {
+		alert('Login with OAuth');
+	}
 
 	// _signUpActivate() {
 	// 	console.log("signup layer active");
@@ -43,6 +46,9 @@ class HeaderLogin extends Component {
 					<Menu icon={<Login />} dropAlign={{ right: "right" }}>
 						<Anchor href="#" onClick={e => this.getLoginModal(e)}>
 							Sign in
+						</Anchor>
+						<Anchor href="#" onClick={e => this.loginWithOauth(e)}>
+							Sign in with OAuth
 						</Anchor>
 						<Anchor href="#" onClick={e => this.getSignUpModal(e)}>
 							Sign up
