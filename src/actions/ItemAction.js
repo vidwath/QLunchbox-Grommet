@@ -22,7 +22,7 @@ export const getItems = () => {
       var data = '';
       show()
       .then(res => {
-        data = res.data.user;
+        data = res.data.item;
         dispatch({type: SHOW_ITEM, payload: {show_item, data}})
       })
       .catch(e => console.log(e))
